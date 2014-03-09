@@ -9,6 +9,7 @@ end
 # similar to Rails `rake console`
 task :console => :environment do
   require 'irb'
+  require './app'
   ARGV.clear
   IRB.start
 end
