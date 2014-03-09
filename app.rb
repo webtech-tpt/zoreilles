@@ -15,4 +15,9 @@ class App < Sinatra::Base
     erb :index
   end
 
+
+  post '/zoreilles' do
+    Zoreille.create!(body: params[:body], username: params[:username])
+    redirect '/'
+  end
 end
