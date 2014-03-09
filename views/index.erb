@@ -15,19 +15,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-8 col-sm-offset-2">
-        <% @zoreilles.each do |z| %>
-          <div class='panel panel-default'>
-            <div class='panel-body'>
-              <p class='lead'>&laquo;<%= z.body %>&raquo;</p>
-              <p class='text-right'>
-                <small>
-                  le <%= z.created_at %>
-                  par <%= z.username %>
-                </small>
-              </p>
-            </div>
-          </div>
-        <% end %>
+        <div id="zoreilles"></div>
         <div class="well well-sm">
           <form action="/zoreilles" method="post">
             <div class="form-group">
@@ -49,10 +37,54 @@
 <!-- Backbone, jQuery, LoDash and Bootstrap -->
 <script src="/lodash-2.4.1.compat.js"></script>
 <script src="/jquery-1.10.2.js"></script>
-<script src="/backbone-1.0.0.js"></script>
+<script src="/backbone-1.1.2.js"></script>
 <script src="/bootstrap-3.0.3.js"></script>
 
 <script type="text/javascript">
-/*-- Your JS here --*/
+var ZoreilleView = Backbone.View.extend({
+  template: _.template("<div class='panel panel-default'> \
+      <div class='panel-body'> \
+        <p class='lead'>&laquo;${body}&raquo;</p> \
+        <p class='text-right'> \
+          <small> \
+            le ${created_at} \
+            par ${username} \
+          </small> \
+        </p> \
+      </div> \
+    </div>"),
+  render: function() {
+    console.log('render zoreille');
+    this.$el.html(this.template(this.model.attributes));
+    return this;
+  },
+});
+
+var ZoreillesView = Backbone.View.extend({
+  initialize: function() {
+    this.model.on('sync', this.render, this);
+  },
+  render: function() {
+    console.log('render zoreilles');
+    var $el = this.$el.empty();
+    this.model.each(function(z){
+      $el.append(new ZoreilleView({model: z}).render().$el);
+    });
+  }
+});
+
+var Zoreilles = Backbone.Collection.extend({
+  url: '/zoreilles'
+});
+
+$(function() {
+  var zoreilles = new Zoreilles();
+  var zoreilles_view = new ZoreillesView({
+    model: zoreilles,
+    el: $('#zoreilles')
+  });
+  zoreilles_view.render();
+  zoreilles.fetch();
+});
 </script>
 </html>

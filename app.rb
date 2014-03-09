@@ -1,5 +1,6 @@
 require_relative './config/environment'
 require 'sinatra'
+require 'json'
 
 
 class Zoreille < ActiveRecord::Base
@@ -14,6 +15,13 @@ class App < Sinatra::Base
   get '/' do
     @zoreilles = Zoreille.order('created_at DESC').all
     erb :index
+  end
+
+
+  get '/zoreilles' do
+    content_type :json
+    @zoreilles = Zoreille.order('created_at DESC').all
+    @zoreilles.to_json
   end
 
 
