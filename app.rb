@@ -12,6 +12,7 @@ class App < Sinatra::Base
   set :public_folder, Proc.new { File.expand_path("./public") }
 
   get '/' do
+    @zoreilles = Zoreille.order('created_at DESC').all
     erb :index
   end
 

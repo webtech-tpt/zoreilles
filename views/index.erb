@@ -9,6 +9,15 @@
 </head>
 
 <body>
+  <% @zoreilles.each do |z| %>
+    <p><%= z.body %></p>
+    <p class='text-right'>
+      <small>
+        le <%= z.created_at %>
+        par <%= z.username %>
+      </small>
+    </p>
+  <% end %>
   <h1>Nouvelle Zoreille</h1>
   <form action="/zoreilles" method="post">
     <div class="form-group">
