@@ -2,6 +2,10 @@ require_relative './config/environment'
 require 'sinatra'
 
 
+class Zoreille < ActiveRecord::Base
+end
+
+
 class App < Sinatra::Base
 
   set :root, File.dirname(__FILE__)
